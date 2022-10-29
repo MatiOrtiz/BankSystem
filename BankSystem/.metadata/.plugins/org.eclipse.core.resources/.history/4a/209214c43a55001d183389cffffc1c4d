@@ -1,0 +1,18 @@
+package Programa;
+
+import java.util.Calendar;
+
+public class Main {
+	public static void main(String [] args) {
+		System.out.println(dateTransactions(31, 2, 2022));
+	}
+	
+	public static String dateTransactions(int dia, int mes, int año) {
+		
+		Calendar calendar= Calendar.getInstance();
+		calendar.add(Calendar.DAY_OF_MONTH, dia);
+		calendar.add(Calendar.MONTH, mes);
+		calendar.add(Calendar.YEAR, año);
+		return calendar.get(Calendar.DAY_OF_MONTH) +" " +  calendar.get(Calendar.MONTH) + " " + calendar.get(Calendar.YEAR);
+	}
+}

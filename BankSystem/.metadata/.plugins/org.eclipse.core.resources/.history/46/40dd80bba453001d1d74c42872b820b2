@@ -1,0 +1,9 @@
+package Programa;
+import java.util.Date;
+
+public class Transaccion {
+	
+	//Tributes
+	protected Date date;
+	protected int hour, minute, second;
+}

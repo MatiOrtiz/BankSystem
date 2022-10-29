@@ -1,0 +1,60 @@
+package Programa;
+import TDALista.DoubleLinkedList;
+import Exceptions.*;
+import TDAPila.*;
+import TDACola.*;
+
+public class CuentaBancaria {
+
+	//Tributes
+	protected String accessCode, firstName, lastName;
+	protected int docNumber;
+	protected float initialAmount, amount;
+	protected DoubleLinkedList <Transaccion> transactionsHistory;
+	
+	//Constructors
+	public CuentaBancaria(String firstName, String lastName, String accessCode, int docNumber, float initialAmount) {
+		this.firstName= firstName;
+		this.lastName= lastName;
+		try {
+		if(checkCode(accessCode))
+			this.accessCode= accessCode;
+		}catch(InvalidAccesCodeException e) {e.printStackTrace();}
+		this.docNumber= docNumber;
+		this.initialAmount= initialAmount;
+	}
+	public CuentaBancaria(String firstName, String lastName, String accessCode, int docNumber) {
+		this(firstName, lastName, accessCode, docNumber, 0);
+	}
+	
+	//Methods
+	public boolean checkCode(String code) throws InvalidAccessCodeException{
+		boolean aux= true;
+		Stack<Character> stack1= new PilaConEnlaces<Character>();
+		Stack<Character> stack2= new PilaConEnlaces<Character>();
+		Queue<Character> queue= new ColaConArregloCircular<Character>();
+		
+		for(int i=0; i<lastName.length(); i++) {
+			queue.enqueue(lastName.charAt(i));
+			stack1.push(lastName.charAt(i));
+			stack2.push(lastName.charAt(i));
+		}
+		queue.enqueue('x');
+		
+		try {
+			while(!stack1.isEmpty())
+				queue.enqueue(stack1.pop());
+			while(!stack2.isEmpty())
+				queue.enqueue(stack2.pop());
+		
+		for(int i=0; i<code.length() && aux; i++) {
+			if(queue.dequeue()!=code.charAt(i)) {
+				throw new InvalidAccessCodeException("ERROR: La clave de acceso es incorrecta.")
+		}
+		}catch(EmptyStackException | EmptyQueueException e) {
+			e.printStackTrace();
+		}
+		return aux;
+	}
+
+}

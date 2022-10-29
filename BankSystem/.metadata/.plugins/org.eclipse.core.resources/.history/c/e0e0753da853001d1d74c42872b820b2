@@ -1,0 +1,26 @@
+package Programa;
+import java.util.Calendar;
+import java.util.Date;
+
+public class Transaccion {
+	
+	//Tributes
+	protected Date date= new Date();
+	protected Calendar calendar;
+	protected int hour, minutes, seconds, docNumber;
+	protected String firstName, lastName, paytype;
+	protected float amount;
+	
+	//Constructor
+	public Transaccion(String firstName, String lastName, int docNumber, String payType, float amount) {
+		this.firstName= firstName;
+		this.lastName= lastName;
+		this.docNumber= docNumber;
+		this.paytype= payType;
+		this.amount= amount;
+		
+		hour= calendar.get(Calendar.HOUR_OF_DAY);
+		minutes= calendar.get(Calendar.MINUTE);
+		seconds= calendar.get(Calendar.SECOND);
+	}
+}

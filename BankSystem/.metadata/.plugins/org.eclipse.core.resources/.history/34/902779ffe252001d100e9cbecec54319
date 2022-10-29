@@ -1,0 +1,46 @@
+package TDAPila;
+import Nodo;
+import Exceptions.EmptyStackException;
+
+public class PilaConEnlaces <E> implements Stack <E>{
+	
+	protected Nodo<E> head;
+	protected int size;
+	
+	/**
+	 * Crea una instancia de clase PilaConEnlaces
+	 */
+	public PilaConEnlaces() {
+		head=null;
+		size=0;
+	}
+	
+	public void push(E elem) {
+		Nodo<E> aux = new Nodo<E>(elem, head);
+		head = aux;
+		size++;	
+	}
+	
+	public E pop() throws EmptyStackException {
+		if(isEmpty())
+			throw new EmptyStackException("No se puede eliminar. Pila vacía");
+		E aux = head.getElem();
+		head = head.getSig();
+		size--;
+		return aux;
+	}
+
+	public E top() throws EmptyStackException {
+		if(size == 0)
+			throw new EmptyStackException("Error. Pila Vacia");
+		return head.getElem();
+	}
+
+	public boolean isEmpty() {
+		return head==null;
+	}
+
+	public int size() {
+		return size;
+	}
+}

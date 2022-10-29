@@ -1,0 +1,92 @@
+package Programa;
+import java.util.Calendar;
+import Exceptions.*;
+
+public class Transaccion {
+	
+	//Tributes
+	protected Calendar calendar;
+	protected int year, month, day; 
+	protected int hour, minutes, seconds, docNumber;
+	protected String firstName, lastName, payType;
+	protected float amount;
+	
+	//Constructor
+	public Transaccion(String firstName, String lastName, int docNumber, String payType, float amount) {
+		this.firstName= firstName;
+		this.lastName= lastName;
+		this.docNumber= docNumber;
+		this.payType= payType;
+		this.amount= amount;
+		
+		hour= calendar.get(Calendar.HOUR_OF_DAY);
+		minutes= calendar.get(Calendar.MINUTE);
+		seconds= calendar.get(Calendar.SECOND);
+		day= calendar.get(Calendar.DAY_OF_MONTH);
+		month= calendar.get(Calendar.MONTH);
+		year= calendar.get(Calendar.YEAR);
+	}
+	/*public Transaccion(int docNumber,String payType, float amount) {
+		this.docNumber= docNumber;
+		this.payType= payType;
+		this.amount= amount;
+		
+		hour= calendar.get(Calendar.HOUR_OF_DAY);
+		minutes= calendar.get(Calendar.MINUTE);
+		seconds= calendar.get(Calendar.SECOND);
+		day= calendar.get(Calendar.DAY_OF_MONTH);
+		month= calendar.get(Calendar.MONTH);
+		year= calendar.get(Calendar.YEAR);
+	}
+	public Transaccion(String firstName, String lastName, String payType, float amount) {
+		this.firstName= firstName;
+		this.lastName= lastName;
+		this.payType= payType;
+		this.amount= amount;
+		
+		hour= calendar.get(Calendar.HOUR_OF_DAY);
+		minutes= calendar.get(Calendar.MINUTE);
+		seconds= calendar.get(Calendar.SECOND);
+		day= calendar.get(Calendar.DAY_OF_MONTH);
+		month= calendar.get(Calendar.MONTH);
+		year= calendar.get(Calendar.YEAR);
+	}*/
+	
+	//Methods
+	public String getFirstName() {
+		return firstName;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public int getDocNumber() {
+		return docNumber;
+	}
+	public String getPayType() {
+		return payType;
+	}
+	public int getYear() {
+		return year;
+	}
+	public int getMonth() {
+		return month;
+	}
+	public int getDay() {
+		return day;
+	}
+	public int getHour() {
+		return hour;
+	}
+	public int getMinutes() {
+		return minutes;
+	}
+	public int getSeconds() {
+		return seconds;
+	}
+	public float getAmount() {
+		return amount;
+	}
+	public String toString() {
+		return firstName +","+ lastName +"DNI: "+ docNumber +"Tipo: "+payType +amount +"Fecha: "+ day +"/"+ month +"/"+ year +"Hora: "+ hour +":"+ minutes;
+	}
+}

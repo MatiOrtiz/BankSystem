@@ -1,0 +1,22 @@
+package Programa;
+import java.util.Calendar;
+import java.util.Date;
+
+public class Transaccion {
+	
+	//Tributes
+	protected Date date;
+	protected Calendar calendar;
+	protected int hour, minute, second, docNumber;
+	protected String firstName, lastName, paytype;
+	protected float amount;
+	
+	//Constructor
+	public Transaccion(String firstName, String lastName, int docNumber, String payType, float amount) {
+		this.firstName= firstName;
+		this.lastName= lastName;
+		this.docNumber= docNumber;
+		this.paytype= payType;
+		this.amount= amount;
+	}
+}
