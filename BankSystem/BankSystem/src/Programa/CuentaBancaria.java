@@ -19,30 +19,33 @@ public class CuentaBancaria {
 	protected PositionList <Transaccion> transactionsHistory;
 	
 	//Constructors
-	public CuentaBancaria(String firstName, String lastName, String accessCode, int docNumber, float initialAmount) {
+	public CuentaBancaria(String firstName, String lastName, int docNumber,  String accessCode, float initialAmount) throws InvalidAccessCodeException{
 		this.firstName= firstName;
 		this.lastName= lastName;
-		try {
 		if(checkCode(accessCode))
 			this.accessCode= accessCode;
-		}catch(InvalidAccessCodeException e) {e.printStackTrace();}
 		this.docNumber= docNumber;
 		this.initialAmount= initialAmount;
 		this.amount+= this.initialAmount;
 		transactionsHistory= new DoubleLinkedList<Transaccion>();
 	}
-	public CuentaBancaria(String firstName, String lastName, String accessCode, int docNumber) {
-		this(firstName, lastName, accessCode, docNumber, 0);
+	public CuentaBancaria(String firstName, String lastName, int docNumber, String accessCode) throws InvalidAccessCodeException{
+		this(firstName, lastName, docNumber, accessCode, 0);
 		amount+= initialAmount;
 	}
 	
 	//Methods
 	public boolean checkCode(String code) throws InvalidAccessCodeException{
-		boolean aux= true;
+		boolean aux= false;
 		Stack<Character> stack1= new PilaConEnlaces<Character>();
 		Stack<Character> stack2= new PilaConEnlaces<Character>();
 		Queue<Character> queue= new ColaConArregloCircular<Character>();
 		
+		if(lastName.length() >= code.length()) {
+			aux = false;
+			throw new InvalidAccessCodeException("ERROR: La clave de acceso es incorrecta.");
+		}
+		else {
 		for(int i=0; i<lastName.length(); i++) {
 			queue.enqueue(lastName.charAt(i));
 			stack1.push(lastName.charAt(i));
@@ -55,17 +58,35 @@ public class CuentaBancaria {
 				queue.enqueue(stack1.pop());
 			while(!stack2.isEmpty())
 				queue.enqueue(stack2.pop());
-		
-			for(int i=0; i<code.length() && aux; i++) {
-				if(queue.dequeue()!=code.charAt(i)) 
+			if(queue.size() != code.length()) {
+				throw new InvalidAccessCodeException("ERROR: La clave de acceso es incorrecta.");
+			}
+			else {
+			for(int i=0; i<code.length() && !aux; i++) {
+				if(queue.dequeue()!=code.charAt(i)) {
 					throw new InvalidAccessCodeException("ERROR: La clave de acceso es incorrecta.");
+				}	
+			}
+			aux = true;
 			}
 		}catch(EmptyStackException | EmptyQueueException e) {
 			e.printStackTrace();
 		}
+		}
 		return aux;
 	}
 	
+	public String getFirstName() {
+		return firstName;
+	}
+	
+	public String getLastName() {
+		return lastName;
+	}
+	
+	public float getAmount() {
+		return amount;
+	}
 	public void transferences(String firstName, String lastName, int docNumber, String payType, float amountTransference) throws InsuficientAmountException {
 		if(amount>=amountTransference) {
 			amount-=amountTransference;

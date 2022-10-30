@@ -1,6 +1,0 @@
-package TDACola;
-
-
-public interface Queue {
-
-}

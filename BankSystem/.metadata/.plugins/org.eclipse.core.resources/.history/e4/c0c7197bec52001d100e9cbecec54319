@@ -1,5 +1,0 @@
-package TDAColaCP;
-
-public interface PriorityQueue {
-
-}

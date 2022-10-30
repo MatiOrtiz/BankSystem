@@ -1,6 +1,0 @@
-package TDAColaCP;
-import TDAMapeo.Entrada;
-
-public class Heap <K,V> implements Entry<K,V> {
-	
-}

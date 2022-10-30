@@ -1,0 +1,44 @@
+package Programa;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+
+public class Transf {
+
+	private JFrame frmTransferencia;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Transf window = new Transf();
+					window.frmTransferencia.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public Transf() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frmTransferencia = new JFrame();
+		frmTransferencia.setTitle("Transferencia");
+		frmTransferencia.setBounds(75, 74, 412, 206);
+		frmTransferencia.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+}

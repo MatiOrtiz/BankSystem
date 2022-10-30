@@ -1,7 +1,0 @@
-package TDAColaCP;
-import TDAMapeo.Entrada;
-
-public class Heap <K,V> implements PriorityQueue<K,V> {
-	
-	protected Entrada<K,V>[] elements;
-}

@@ -1,9 +1,0 @@
-import java.util.Date;
- 
-public class Main {
-    public static void main(String[] args) {
-        Date date = new Date();
- 
-        System.out.println(date);        // Dom 24 de diciembre 16:34:27 PDT 2017
-    }
-}
