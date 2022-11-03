@@ -1,0 +1,241 @@
+package Programa;
+import TDADiccionario.*;
+import Exceptions.*;
+import TDAPila.*;
+import TDACola.*;
+import TDALista.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Iterator;
+import Auxiliar.*;
+import TDAColaCP.*;
+
+public class CuentaBancaria {
+
+	//Tributes
+	protected String clave, nombre, apellido;
+	protected int numDoc;
+	protected float montoInicial, monto;
+	protected PositionList <Transaccion> historialTransaccion;
+	
+	//Constructors
+	public CuentaBancaria(String nombre, String apellido, int numDoc,  String clave, float montoInicial) throws InvalidAccessCodeException, InvalidNameException{
+		if(nombre.equals("") | apellido.equals(""))
+			throw new InvalidNameException ("Complete los campos obligatorios.");
+		this.nombre= nombre;
+		this.apellido= apellido;
+		if(checkCode(clave))
+			this.clave= clave;
+		this.numDoc= numDoc;
+		this.montoInicial= montoInicial;
+		this.monto+= this.montoInicial;
+		historialTransaccion= new ListaDoblementeEnlazada<Transaccion>();
+	}
+	public CuentaBancaria(String nombre, String apellido, int numDoc, String clave) throws InvalidAccessCodeException, InvalidNameException{
+		this(nombre, apellido, numDoc, clave, 0);
+		monto+= montoInicial;
+	}
+	
+	//Methods
+	public boolean checkCode(String claveIngresada) throws InvalidAccessCodeException{
+		boolean aux= false;
+		Stack<Character> stack1= new PilaConEnlaces<Character>();
+		Stack<Character> stack2= new PilaConEnlaces<Character>();
+		Queue<Character> queue= new ColaConArregloCircular<Character>();
+		
+		if(apellido.length() >= claveIngresada.length()) {
+			aux = false;
+			throw new InvalidAccessCodeException("ERROR: La clave de acceso es incorrecta.");
+		}
+		else {
+		for(int i=0; i<apellido.length(); i++) {
+			queue.enqueue(apellido.charAt(i));
+			stack1.push(apellido.charAt(i));
+			stack2.push(apellido.charAt(i));
+		}
+		queue.enqueue('x');
+		
+		try {
+			while(!stack1.isEmpty())
+				queue.enqueue(stack1.pop());
+			while(!stack2.isEmpty())
+				queue.enqueue(stack2.pop());
+			if(queue.size() != claveIngresada.length()) {
+				throw new InvalidAccessCodeException("ERROR: La clave de acceso es incorrecta.");
+			}
+			else {
+			for(int i=0; i<claveIngresada.length() && !aux; i++) {
+				if(queue.dequeue()!=claveIngresada.charAt(i)) {
+					throw new InvalidAccessCodeException("ERROR: La clave de acceso es incorrecta.");
+				}	
+			}
+			aux = true;
+			}
+		}catch(EmptyStackException | EmptyQueueException e) {
+			e.printStackTrace();
+		}
+		}
+		return aux;
+	}
+	
+	public String getFirstName() {
+		return nombre;
+	}
+	
+	public String getLastName() {
+		return apellido;
+	}
+	
+	public float getAmount() {
+		return monto;
+	}
+	public void transferences(String nombre, String apellido, int numDoc, float montoTransferencia) throws InsuficientAmountException {
+		if(monto>=montoTransferencia) {
+			monto-=montoTransferencia;
+			Transaccion transferencia= new Transaccion(nombre, apellido, numDoc,"Débito", montoTransferencia);
+			historialTransaccion.addLast(transferencia);
+		}
+		else throw new InsuficientAmountException("ERROR: Saldo insuficiente.");
+	}
+	public void deposites(String nombre, String lastName, int docNumber, float amountDeposite) {
+		monto+= amountDeposite;
+		Transaccion deposite= new Transaccion(nombre, lastName, docNumber, "Crédito", amountDeposite);
+		historialTransaccion.addLast(deposite);
+	}
+	public String nTrans(int n) throws BoundaryViolationException, EmptyListException{
+		String aux = "";
+		try {
+			Position<Transaccion> pos= historialTransaccion.last();
+			if(n>0)
+				aux = pos.element().toString();
+			for(int m=n-1; m>0; m--) {
+				if(historialTransaccion.prev(pos)!=null) {
+					pos= historialTransaccion.prev(pos);
+					aux = aux+"\n"+pos.element().toString();
+				}
+			}
+		}catch(InvalidPositionException e){e.printStackTrace();}
+		return aux;
+	}
+	
+	public String nTransMayorValor(int n) throws EmptyPriorityQueueException {
+		PriorityQueue<Float, Transaccion> cp= new Heap<Float, Transaccion>(historialTransaccion.size()+1, new Comparador<Float>());
+		String aux = "";
+		try {
+			if(n > 0) {
+				for(Transaccion t : historialTransaccion) {
+					cp.insert(t.getAmount(), t);
+				}
+				for(int i=0; i<n; i++) {
+					aux = aux+cp.removeMin().getValue().toString()+"\n";
+				}
+			}
+		}catch(InvalidKeyException  e) {
+			e.printStackTrace();
+		}
+		return aux;
+	}
+	
+	public String operacionMismoValor(float valor){
+		Dictionary<Float, Transaccion> d = new DiccionarioHashAbierto<Float, Transaccion>();
+		String aux ="";
+		try {
+			for(Transaccion t : historialTransaccion) {
+				d.insert(t.getAmount(), t);
+			}
+			if(d.find(valor) != null) {
+				for(Entry<Float, Transaccion> j : d.findAll(valor)){
+						aux = aux + j.getValue().toString()+"\n";
+				}
+			}
+		}catch(InvalidKeyException e) {
+			e.printStackTrace();
+		}
+		return aux;
+	}
+	
+	public String dateTransactions(int dia, int mes, int año) throws InvalidDateException{
+		int mesAux= mes-1;
+		if(!validarFecha(dia, mesAux, año))
+			throw new InvalidDateException("La fecha ingresada es invalida");
+		String aux = "";
+		Iterator<Transaccion> it = historialTransaccion.iterator();
+		while(it.hasNext()) {
+			Transaccion t = it.next();
+			if(t.getDay() == dia && t.getMonth() == mesAux && t.getYear() == año) {
+				aux = aux+t.toString()+"\n";
+			}
+		}
+		return aux;
+	}
+	private boolean validarFecha(int dia, int mes, int año) {
+		String aux = dia+"/"+mes+"/"+año;
+		try {
+			SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+			formatoFecha.setLenient(false);
+			formatoFecha.parse(aux);
+		}catch(ParseException e) {
+			return false;
+		}
+		return true;
+	}
+	
+	public String amountTransactions(float amount, String payType) {
+		String aux= "";
+		if(payType.equals("Crédito")) {
+			Iterator<Transaccion> it = historialTransaccion.iterator();
+			while(it.hasNext()) {
+				Transaccion t = it.next();
+				if(amount < t.getAmount() && t.getPayType().equals("Crédito")) {
+					aux = aux+t.toString()+"\n";
+				}
+			}
+		}
+		if(payType.equals("Débito")) {
+			Iterator<Transaccion> it = historialTransaccion.iterator();
+			while(it.hasNext()) {
+				Transaccion t = it.next();
+				if(amount < t.getAmount() && t.getPayType().equals("Débito")) {
+					aux = aux+t.toString()+"\n";
+				}
+			}
+		}
+		if(payType.equals("Todas")) {
+			Iterator<Transaccion> it = historialTransaccion.iterator();
+			while(it.hasNext()) {
+				Transaccion t = it.next();
+				if(amount < t.getAmount() && (t.getPayType().equals("Crédito") ||t.getPayType().equals("Débito"))) {
+					aux = aux+t.toString()+"\n";
+				}
+			}
+		}
+		return aux;
+	}
+	
+	public float saldoEnDeterminadaFecha(int dia, int mes, int año) throws InvalidDateException, EmptyListException {
+		int mesAux= mes-1;
+		if(!validarFecha(dia, mesAux, año))
+			throw new InvalidDateException("La fecha ingresada es invalida");
+		float auxAmount = monto;
+		boolean encontre = false;
+		try {
+			Position<Transaccion> pos = historialTransaccion.last();
+			while(pos != historialTransaccion.first() && !encontre) {
+				if(pos.element().getDay()==dia && pos.element().getMonth()==mesAux && pos.element().getYear()==año) 
+					encontre=true;
+					else { if(pos.element().getPayType().equals("Crédito")) 
+							  auxAmount -= pos.element().getAmount();
+							else auxAmount += pos.element().getAmount();
+						   pos= historialTransaccion.prev(pos);
+					}	
+			}
+			if(pos == historialTransaccion.first()) {
+				if(pos.element().getDay()!=dia || pos.element().getMonth()!=mesAux || pos.element().getYear()!=año)
+					if(pos.element().getPayType().equals("Crédito")) 
+						auxAmount -= pos.element().getAmount();
+					else auxAmount += pos.element().getAmount();
+				}
+		}catch(BoundaryViolationException | InvalidPositionException e) { e.printStackTrace();}
+		return auxAmount;
+	}
+}

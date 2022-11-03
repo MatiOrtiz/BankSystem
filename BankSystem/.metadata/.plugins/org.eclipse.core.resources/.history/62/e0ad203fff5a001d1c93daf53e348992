@@ -1,0 +1,68 @@
+package Programa;
+import java.util.Calendar;
+
+public class Transaccion {
+	
+	//Tributes
+	protected Calendar calendario;
+	protected int year, month, day; 
+	protected int hour, minutes, seconds, docNumber;
+	protected String firstName, lastName, payType;
+	protected float amount;
+	
+	//Constructor
+	public Transaccion(String firstName, String lastName, int docNumber, String payType, float amount) {
+		this.firstName= firstName;
+		this.lastName= lastName;
+		this.docNumber= docNumber;
+		this.payType= payType;
+		this.amount= amount;
+		
+		calendario= Calendar.getInstance();
+		
+		hour= calendario.get(Calendar.HOUR_OF_DAY);
+		minutes= calendario.get(Calendar.MINUTE);
+		seconds= calendario.get(Calendar.SECOND);
+		day= calendario.get(Calendar.DAY_OF_MONTH);
+		month= calendario.get(Calendar.MONTH);
+		year= calendario.get(Calendar.YEAR);
+	}
+	
+	//Methods
+	public String getFirstName() {
+		return firstName;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public int getDocNumber() {
+		return docNumber;
+	}
+	public String getPayType() {
+		return payType;
+	}
+	public int getYear() {
+		return year;
+	}
+	public int getMonth() {
+		return month+1;
+	}
+	public int getDay() {
+		return day;
+	}
+	public int getHour() {
+		return hour;
+	}
+	public int getMinutes() {
+		return minutes;
+	}
+	public int getSeconds() {
+		return seconds;
+	}
+	public float getAmount() {
+		return amount;
+	}
+	public String toString() {
+		return "Nombre completo: "+firstName +", "+ lastName +" -- DNI: "+ docNumber +" -- Tipo: "+payType +" -- Monto: "+amount +" -- Fecha: "+ day +"/"+ (month+1) +"/"+ year +" -- Hora: "+ hour +":"+ minutes;
+	}
+}

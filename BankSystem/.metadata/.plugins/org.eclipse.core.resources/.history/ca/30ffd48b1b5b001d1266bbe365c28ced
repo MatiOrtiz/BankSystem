@@ -1,0 +1,320 @@
+package Programa;
+import TDADiccionario.*;
+import Exceptions.*;
+import TDAPila.*;
+import TDACola.*;
+import TDALista.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Iterator;
+import Auxiliar.*;
+import TDAColaCP.*;
+
+public class CuentaBancaria {
+
+	//Tributes
+	protected String clave, nombre, apellido;
+	protected int numDoc;
+	protected float montoInicial, monto;
+	protected PositionList <Transaccion> historialTransaccion;
+	
+	//Constructors----------------------------------------------------------------------------------------------------------------------------------
+	/*
+	 * Crea una instancia de clase CuentaBancaria
+	 */
+	public CuentaBancaria(String nombre, String apellido, int numDoc,  String clave, float montoInicial) throws InvalidAccessCodeException, InvalidNameException{
+		if(nombre.equals("") | apellido.equals(""))
+			throw new InvalidNameException ("Complete los campos obligatorios.");
+		this.nombre= nombre;
+		this.apellido= apellido;
+		if(checkCode(clave))
+			this.clave= clave;
+		this.numDoc= numDoc;
+		this.montoInicial= montoInicial;
+		this.monto+= this.montoInicial;
+		historialTransaccion= new ListaDoblementeEnlazada<Transaccion>();
+	}
+	
+	/*
+	 * Crea una instancia de clase CuentaBancaria
+	 */
+	public CuentaBancaria(String nombre, String apellido, int numDoc, String clave) throws InvalidAccessCodeException, InvalidNameException{
+		this(nombre, apellido, numDoc, clave, 0);
+		monto+= montoInicial;
+	}
+	
+	//Methods----------------------------------------------------------------------------------------------------------------------------------
+	
+	/*
+	 * Chequea que la clave de acceso cumpla con el formato AxA'A', donde A representa el apellido, A'representa el apellido al revés y x es un caracter
+	 * @param claveIngresada clave a chequear si es valida
+	 * @return boolean true si la clave es válida, false en caso contrario
+	 */
+	public boolean checkCode(String claveIngresada) throws InvalidAccessCodeException{
+		boolean aux= false;
+		Stack<Character> stack1= new PilaConEnlaces<Character>();
+		Stack<Character> stack2= new PilaConEnlaces<Character>();
+		Queue<Character> queue= new ColaConArregloCircular<Character>();
+		
+		if(apellido.length() >= claveIngresada.length()) {
+			aux = false;
+			throw new InvalidAccessCodeException("ERROR: La clave de acceso es incorrecta.");
+		}
+		else {
+		for(int i=0; i<apellido.length(); i++) {
+			queue.enqueue(apellido.charAt(i));
+			stack1.push(apellido.charAt(i));
+			stack2.push(apellido.charAt(i));
+		}
+		queue.enqueue('x');
+		
+		try {
+			while(!stack1.isEmpty())
+				queue.enqueue(stack1.pop());
+			while(!stack2.isEmpty())
+				queue.enqueue(stack2.pop());
+			if(queue.size() != claveIngresada.length()) {
+				throw new InvalidAccessCodeException("ERROR: La clave de acceso es incorrecta.");
+			}
+			else {
+			for(int i=0; i<claveIngresada.length() && !aux; i++) {
+				if(queue.dequeue()!=claveIngresada.charAt(i)) {
+					throw new InvalidAccessCodeException("ERROR: La clave de acceso es incorrecta.");
+				}	
+			}
+			aux = true;
+			}
+		}catch(EmptyStackException | EmptyQueueException e) {
+			e.printStackTrace();
+		}
+		}
+		return aux;
+	}
+	/*
+	 * retorna el nombre
+	 */
+	public String getFirstName() {
+		return nombre;
+	}
+	
+	/*
+	 * retorna el apellido
+	 */
+	public String getLastName() {
+		return apellido;
+	}
+	
+	/* 
+	 * retorna el monto
+	 */
+	public float getAmount() {
+		return monto;
+	}
+	
+	/*
+	 * Realiza las transferencias y las registra en el historial de Transacciones
+	 * @param nombre a registar
+	 * @param monto a transferir
+	 * @param numDoc a registrar
+	 * @param montoTransferencia para transferir
+	 */
+	public void transferences(String nombre, String apellido, int numDoc, float montoTransferencia) throws InsuficientAmountException {
+		if(monto>=montoTransferencia) {
+			monto-=montoTransferencia;
+			Transaccion transferencia= new Transaccion(nombre, apellido, numDoc,"Débito", montoTransferencia);
+			historialTransaccion.addLast(transferencia);
+		}
+		else throw new InsuficientAmountException("ERROR: Saldo insuficiente.");
+	}
+	
+	/*
+	 * Realiza los depósitos y los registra en el historial de Transacciones
+	 * @param nombre a registar
+	 * @param monto a registrar y depositar
+	 * @param numDoc a registrar
+	 * @param montoTransferencia para registrar y depositar
+	 */
+	public void deposites(String nombre, String apellido, int numDoc, float montoDeposito) {
+		monto+= montoDeposito;
+		Transaccion deposito= new Transaccion(nombre, apellido, numDoc, "Crédito", montoDeposito);
+		historialTransaccion.addLast(deposito);
+	}
+	
+	/*
+	 * Consulta las ultimas n transacciones realizadas
+	 * @param n cantidad de transacciones a buscar
+	 * @return un String con las ultimas n transacciones 
+	 */
+	public String nTrans(int n) throws BoundaryViolationException, EmptyListException{
+		String aux = "";
+		try {
+			Position<Transaccion> pos= historialTransaccion.last();
+			if(n>0)
+				aux = pos.element().toString();
+			for(int m=n-1; m>0; m--) {
+				if(historialTransaccion.prev(pos)!=null) {
+					pos= historialTransaccion.prev(pos);
+					aux = aux+"\n"+pos.element().toString();
+				}
+			}
+		}catch(InvalidPositionException e){e.printStackTrace();}
+		return aux;
+	}
+	
+	/*
+	 * Consulta las n transacciones de mayor valor realizadas
+	 * @param n cantidad de transacciones a buscar
+	 * @return un String con las n transacciones de mayor valor realizadas
+	 */
+	public String nTransMayorValor(int n) throws EmptyPriorityQueueException {
+		PriorityQueue<Float, Transaccion> cp= new Heap<Float, Transaccion>(historialTransaccion.size()+1, new Comparador<Float>());
+		String aux = "";
+		try {
+			if(n > 0) {
+				for(Transaccion t : historialTransaccion) {
+					cp.insert(t.getAmount(), t);
+				}
+				for(int i=0; i<n; i++) {
+					aux = aux+cp.removeMin().getValue().toString()+"\n";
+				}
+			}
+		}catch(InvalidKeyException  e) {
+			e.printStackTrace();
+		}
+		return aux;
+	}
+	
+	/*
+	 * Consulta todas las operaciones realizadas iguales a determinado valor
+	 * @param valor se compara con los valores de las transacciones realizadas
+	 * @return un String con las transacciones iguales a determinado valor
+	 */
+	public String operacionMismoValor(float valor){
+		Dictionary<Float, Transaccion> d = new DiccionarioHashAbierto<Float, Transaccion>();
+		String aux ="";
+		try {
+			for(Transaccion t : historialTransaccion) {
+				d.insert(t.getAmount(), t);
+			}
+			if(d.find(valor) != null) {
+				for(Entry<Float, Transaccion> j : d.findAll(valor)){
+						aux = aux + j.getValue().toString()+"\n";
+				}
+			}
+		}catch(InvalidKeyException e) {
+			e.printStackTrace();
+		}
+		return aux;
+	}
+	
+	/*
+	 * Consulta todas las transacciones realizadas en determinada fecha
+	 * @param dia se compara con los dias de las transacciones realizadas
+	 * @param mes se compara con los meses de las transacciones realizadas
+	 * @param anio se compara con los anios de las transacciones realizadas
+	 * @return un String con las transacciones realizadas en determinada fecha
+	 */
+	public String dateTransactions(int dia, int mes, int anio) throws InvalidDateException{
+		int mesAux= mes-1;
+		if(!validarFecha(dia, mesAux, anio))
+			throw new InvalidDateException("La fecha ingresada es invalida");
+		String aux = "";
+		Iterator<Transaccion> it = historialTransaccion.iterator();
+		while(it.hasNext()) {
+			Transaccion t = it.next();
+			if(t.getDay() == dia && t.getMonth() == mes && t.getYear() == anio) {
+				aux = aux+t.toString()+"\n";
+			}
+		}
+		return aux;
+	}
+	
+	/**
+	 * Chequea si la fecha ingresada por parámetro es válida, en ese caso devuelve true, sino devuelve false.
+	 * @param dia
+	 * @param mes
+	 * @param anio
+	 * @return boolean
+	 */
+	private boolean validarFecha(int dia, int mes, int anio) {
+		String aux = dia+"/"+mes+"/"+anio;
+		try {
+			SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+			formatoFecha.setLenient(false);
+			formatoFecha.parse(aux);
+		}catch(ParseException e) {
+			return false;
+		}
+		return true;
+	}
+	
+	/*Consulta todas las transacciones realizadas que superen determinado valor
+	 * @param valor se compara con los valores de las Transacciones realizadas para hallar los montos de transacciones que lo superen
+	 *@return un String con las transacciones realizadas que superen determinado valor
+	 */
+	public String amountTransactions(float valor, String tipoTransaccion) {
+		String aux= "";
+		if(tipoTransaccion.equals("Crédito")) {
+			Iterator<Transaccion> it = historialTransaccion.iterator();
+			while(it.hasNext()) {
+				Transaccion t = it.next();
+				if(valor < t.getAmount() && t.getPayType().equals("Crédito")) {
+					aux = aux+t.toString()+"\n";
+				}
+			}
+		}
+		if(tipoTransaccion.equals("Débito")) {
+			Iterator<Transaccion> it = historialTransaccion.iterator();
+			while(it.hasNext()) {
+				Transaccion t = it.next();
+				if(valor < t.getAmount() && t.getPayType().equals("Débito")) {
+					aux = aux+t.toString()+"\n";
+				}
+			}
+		}
+		if(tipoTransaccion.equals("Todas")) {
+			Iterator<Transaccion> it = historialTransaccion.iterator();
+			while(it.hasNext()) {
+				Transaccion t = it.next();
+				if(valor < t.getAmount() && (t.getPayType().equals("Crédito") ||t.getPayType().equals("Débito"))) {
+					aux = aux+t.toString()+"\n";
+				}
+			}
+		}
+		return aux;
+	}
+	
+	/*
+	 * Consulta el saldo de la cuenta en una determinada fecha
+	 * @param dia dia de la fecha que se quiere conocer el saldo 
+	 * @param mes mes de la fecha que se quiere conocer el saldo
+	 * @param anio año de la fecha que se quiere conocer el saldo
+	 * @return un float con el saldo de la cuenta en determinada fecha
+	 */
+	public float saldoEnDeterminadaFecha(int dia, int mes, int anio) throws InvalidDateException, EmptyListException {
+		int mesAux= mes-1;
+		if(!validarFecha(dia, mesAux, anio))
+			throw new InvalidDateException("La fecha ingresada es invalida");
+		float montoAux = monto;
+		boolean encontre = false;
+		try {
+			Position<Transaccion> pos = historialTransaccion.last();
+			while(pos != historialTransaccion.first() && !encontre) {
+				if(pos.element().getDay()==dia && pos.element().getMonth()==mes && pos.element().getYear()==anio) 
+					encontre=true;
+					else { if(pos.element().getPayType().equals("Crédito")) 
+							  montoAux -= pos.element().getAmount();
+							else montoAux += pos.element().getAmount();
+						   pos= historialTransaccion.prev(pos);
+					}	
+			}
+			if(pos == historialTransaccion.first()) 
+				if(pos.element().getDay()!=dia || pos.element().getMonth()!=mes || pos.element().getYear()!=anio) {
+					if(pos.element().getPayType().equals("Crédito")) 
+						montoAux -= pos.element().getAmount();
+					else montoAux += pos.element().getAmount();
+				}
+		}catch(BoundaryViolationException | InvalidPositionException e) { e.printStackTrace();}
+		return montoAux;
+	}
+}
