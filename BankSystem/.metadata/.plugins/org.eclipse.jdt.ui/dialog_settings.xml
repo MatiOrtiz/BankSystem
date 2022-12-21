@@ -65,11 +65,11 @@
 		<item key="openinbrowser" value="false"/>
 		<item key="source" value="17"/>
 		<item key="antpath" value="D:\User\Documents\ING. SISTEMAS DE INFORMACIÓN\ED\Java on Eclipse\SistemaDeBanco\Fuentes\javadoc.xml"/>
-		<item key="destdir" value="D:\User\Documents\ING. SISTEMAS DE INFORMACIÓN\ED\Java on Eclipse\SistemaDeBanco\Documentacion\Javadoc"/>
+		<item key="destdir" value="D:\User\Documents\ING. SISTEMAS DE INFORMACIÓN\ED\Java on Eclipse\Proyecto-ED-2022-133804-136225\Documentacion\Javadoc"/>
 		<section name="projects">
 			<section name="Fuentes">
 				<item key="href" value=""/>
-				<item key="destdir" value="D:\User\Documents\ING. SISTEMAS DE INFORMACIÓN\ED\Java on Eclipse\SistemaDeBanco\Documentacion\Javadoc"/>
+				<item key="destdir" value="D:\User\Documents\ING. SISTEMAS DE INFORMACIÓN\ED\Java on Eclipse\Proyecto-ED-2022-133804-136225\Documentacion\Javadoc"/>
 				<item key="antpath" value="D:\User\Documents\ING. SISTEMAS DE INFORMACIÓN\ED\Java on Eclipse\SistemaDeBanco\Fuentes\javadoc.xml"/>
 			</section>
 		</section>
@@ -86,11 +86,13 @@
 		<item key="FatJarPackageWizardPage.ANTSCRIPT_LOCATION" value="D:\User\Documents\ING. SISTEMAS DE INFORMACIÓN\ED\Java on Eclipse\SistemaDeBanco"/>
 		<item key="FatJarPackageWizardPage.LIBRARY_HANDLING" value="3"/>
 		<item key="FatJarPackageWizardPage.LAUNCH_CONFIGURATION_SELECTION_NAME" value="BankSystemGUI - Fuentes"/>
-		<item key="FatJarPackageWizardPage.DESTINATION_PATH_SELECTION" value="D:\User\Documents\ING. SISTEMAS DE INFORMACIÓN\ED\Java on Eclipse\SistemaDeBanco\Jar\archivoProyecto.jar"/>
+		<item key="FatJarPackageWizardPage.DESTINATION_PATH_SELECTION" value="D:\User\Documents\ING. SISTEMAS DE INFORMACIÓN\ED\Java on Eclipse\Proyecto-ED-2022-133804-136225\Jar\archivoProyecto.jar"/>
 		<list key="FatJarPackageWizardPage.DESTINATION_NAMES_ID">
+			<item value="D:\User\Documents\ING. SISTEMAS DE INFORMACIÓN\ED\Java on Eclipse\Proyecto-ED-2022-133804-136225\Jar\archivoProyecto.jar"/>
 			<item value="D:\User\Documents\ING. SISTEMAS DE INFORMACIÓN\ED\Java on Eclipse\SistemaDeBanco\Jar\archivoProyecto.jar"/>
 		</list>
 		<list key="FatJarPackageWizardPage.ANTSCRIPT_LOCATION_HISTORY">
+			<item value="D:\User\Documents\ING. SISTEMAS DE INFORMACIÓN\ED\Java on Eclipse\SistemaDeBanco"/>
 			<item value=".xml"/>
 		</list>
 	</section>

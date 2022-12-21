@@ -1,6 +1,10 @@
 package Programa;
 import java.util.Calendar;
 
+/**
+ * Permite crear una nueva transacción con los datos de la persona, el monto, el día, mes y año, la hora 
+ * y si el tipo de transaccion es depósito o transferencia, para luego quedar registrada en la cuenta bancaria.
+ */
 public class Transaccion {
 	
 	//Tributes
@@ -12,7 +16,7 @@ public class Transaccion {
 	
 	//Constructor----------------------------------------------------------------------------------------------------------------------------------
 	
-	/*
+	/**
 	 * Crea una instancia de clase Transaccion
 	 */
 	public Transaccion(String nombre, String apellido, int numDoc, String tipoTransaccion, float monto) {
@@ -34,84 +38,96 @@ public class Transaccion {
 	
 	//Methods----------------------------------------------------------------------------------------------------------------------------------
 	
-	/*
+	/**
+	 * Devuelve el nombre
 	 * @return nombre
 	 */
 	public String getFirstName() {
 		return nombre;
 	}
 	
-	/*
+	/**
+	 * Devuelve el apellido
 	 * @return apellido
 	 */
 	public String getLastName() {
 		return apellido;
 	}
 	
-	/*
+	/**
+	 * Devuelve el número de documento
 	 * @return numero de documento
 	 */
 	public int getDocNumber() {
 		return numDoc;
 	}
 	
-	/*
+	/**
+	 * Devuelve el tipo de transacción
 	 * @return tipo de transaccion
 	 */
 	public String getPayType() {
 		return tipoTransaccion;
 	}
 	
-	/* 
+	/**
+	 * Devuelve el año
 	 * @return año
 	 */
 	public int getYear() {
 		return anio;
 	}
 	
-	/*
+	/**
+	 * Devuelve el mes
 	 * @return mes
 	 */
 	public int getMonth() {
 		return mes+1;
 	}
 	
-	/*
+	/**
+	 * Devuelve el día
 	 * @return dia
 	 */
 	public int getDay() {
 		return dia;
 	}
 	
-	/*
+	/**
+	 * Devuelve la hora
 	 * @return hora
 	 */
 	public int getHour() {
 		return hora;
 	}
 	
-	/*
+	/**
+	 * Devuelve los minutos
 	 * @return minutos
 	 */
 	public int getMinutes() {
 		return minutos;
 	}
 	
-	/*
+	/**
+	 * Devuelve los segundos
 	 * @return segundos
 	 */
 	public int getSeconds() {
 		return segundos;
 	}
 	
-	/*
+	/**
+	 * Devuelve el monto de la transacción
 	 * @return monto
 	 */
 	public float getAmount() {
 		return monto;
 	}
 	
-	/*
+	/**
+	 * Devuelve un String con todos los atributos de la clase
 	 * @return una cadena String con todos los atributos
 	 */
 	public String toString() {

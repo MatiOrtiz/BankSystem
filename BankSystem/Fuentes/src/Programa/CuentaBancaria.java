@@ -10,6 +10,12 @@ import java.util.Iterator;
 import Auxiliar.*;
 import TDAColaCP.*;
 
+/**
+ * Permite crear una cuenta bancaria con los datos del usuario, depositos, transferencias y montos disponibles.
+ * Incluye la posibilidad de acceder a: historial de movimientos, consultar una n cantidad de transacciones, una n cantidad de transacciones de mayor
+ * valor, una operacion de un determinado valor dado por el usuario, las transacciones realizadas en una fecha, las transacciones que superen determinado monto
+ * dado por el usuario y el saldo en determinada fecha dada por el usuario. 
+ */
 public class CuentaBancaria {
 
 	//Tributes
@@ -19,7 +25,7 @@ public class CuentaBancaria {
 	protected PositionList <Transaccion> historialTransaccion;
 	
 	//Constructors----------------------------------------------------------------------------------------------------------------------------------
-	/*
+	/**
 	 * Crea una instancia de clase CuentaBancaria
 	 */
 	public CuentaBancaria(String nombre, String apellido, int numDoc,  String clave, float montoInicial) throws InvalidAccessCodeException, InvalidNameException{
@@ -35,7 +41,7 @@ public class CuentaBancaria {
 		historialTransaccion= new ListaDoblementeEnlazada<Transaccion>();
 	}
 	
-	/*
+	/**
 	 * Crea una instancia de clase CuentaBancaria
 	 */
 	public CuentaBancaria(String nombre, String apellido, int numDoc, String clave) throws InvalidAccessCodeException, InvalidNameException{
@@ -45,7 +51,7 @@ public class CuentaBancaria {
 	
 	//Methods----------------------------------------------------------------------------------------------------------------------------------
 	
-	/*
+	/**
 	 * Chequea que la clave de acceso cumpla con el formato AxA'A', donde A representa el apellido, A'representa el apellido al revés y x es un caracter
 	 * @param claveIngresada clave a chequear si es valida
 	 * @return boolean true si la clave es válida, false en caso contrario
@@ -90,28 +96,31 @@ public class CuentaBancaria {
 		}
 		return aux;
 	}
-	/*
+	/**
+	 * Devuelve el nombre del usuario
 	 * @return el nombre
 	 */
 	public String getFirstName() {
 		return nombre;
 	}
 	
-	/*
+	/**
+	 * Devuelve el apellido del usuario
 	 * @return el apellido
 	 */
 	public String getLastName() {
 		return apellido;
 	}
 	
-	/* 
+	/**
+	 * Devuelve el monto del usuario
 	 * @return el monto
 	 */
 	public float getAmount() {
 		return monto;
 	}
 	
-	/*
+	/**
 	 * Realiza las transferencias y las registra en el historial de Transacciones
 	 * @param nombre a registar
 	 * @param monto a transferir
@@ -127,7 +136,7 @@ public class CuentaBancaria {
 		else throw new InsuficientAmountException("ERROR: Saldo insuficiente.");
 	}
 	
-	/*
+	/**
 	 * Realiza los depósitos y los registra en el historial de Transacciones
 	 * @param nombre a registar
 	 * @param monto a registrar y depositar
@@ -140,7 +149,7 @@ public class CuentaBancaria {
 		historialTransaccion.addLast(deposito);
 	}
 	
-	/*
+	/**
 	 * Consulta las ultimas n transacciones realizadas
 	 * @param n cantidad de transacciones a buscar
 	 * @return un String con las ultimas n transacciones 
@@ -161,7 +170,7 @@ public class CuentaBancaria {
 		return aux;
 	}
 	
-	/*
+	/**
 	 * Consulta las n transacciones de mayor valor realizadas
 	 * @param n cantidad de transacciones a buscar
 	 * @return un String con las n transacciones de mayor valor realizadas
@@ -169,13 +178,22 @@ public class CuentaBancaria {
 	public String nTransMayorValor(int n) throws EmptyPriorityQueueException {
 		PriorityQueue<Float, Transaccion> cp= new Heap<Float, Transaccion>(historialTransaccion.size()+1, new Comparador<Float>());
 		String aux = "";
+		PositionList<Transaccion> list= new ListaDoblementeEnlazada<Transaccion>();
+		if(n>historialTransaccion.size())
+			throw new EmptyPriorityQueueException("");
 		try {
 			if(n > 0) {
 				for(Transaccion t : historialTransaccion) {
 					cp.insert(t.getAmount(), t);
 				}
-				for(int i=0; i<n; i++) {
-					aux = aux+cp.removeMin().getValue().toString()+"\n";
+				while(!cp.isEmpty())
+					list.addFirst(cp.removeMin().getValue());
+				
+				Iterator<Position<Transaccion>> it= list.positions().iterator();
+				int i=0;
+				while(it.hasNext() && i<n) {
+					aux = aux+it.next().element().toString()+"\n";
+					i++;
 				}
 			}
 		}catch(InvalidKeyException  e) {
@@ -184,7 +202,7 @@ public class CuentaBancaria {
 		return aux;
 	}
 	
-	/*
+	/**
 	 * Consulta todas las operaciones realizadas iguales a determinado valor
 	 * @param valor se compara con los valores de las transacciones realizadas
 	 * @return un String con las transacciones iguales a determinado valor
@@ -207,7 +225,7 @@ public class CuentaBancaria {
 		return aux;
 	}
 	
-	/*
+	/**
 	 * Consulta todas las transacciones realizadas en determinada fecha
 	 * @param dia se compara con los dias de las transacciones realizadas
 	 * @param mes se compara con los meses de las transacciones realizadas
@@ -248,7 +266,8 @@ public class CuentaBancaria {
 		return true;
 	}
 	
-	/*Consulta todas las transacciones realizadas que superen determinado valor
+	/**
+	 * Consulta todas las transacciones realizadas que superen determinado valor
 	 * @param valor se compara con los valores de las Transacciones realizadas para hallar los montos de transacciones que lo superen
 	 *@return un String con las transacciones realizadas que superen determinado valor
 	 */
@@ -284,7 +303,7 @@ public class CuentaBancaria {
 		return aux;
 	}
 	
-	/*
+	/**
 	 * Consulta el saldo de la cuenta en una determinada fecha
 	 * @param dia dia de la fecha que se quiere conocer el saldo 
 	 * @param mes mes de la fecha que se quiere conocer el saldo

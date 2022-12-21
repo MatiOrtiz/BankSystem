@@ -4,8 +4,8 @@ package Exceptions;
 public class EmptyQueueException extends Exception{
 	
 	/**
-	 * Excepci�n que se lanza cuando la cola est� vac�a
-	 * @param msg mensaje que se mostrar�
+	 * Excepción que se lanza cuando la cola está vacía
+	 * @param msg mensaje que se mostrará
 	 */
 	public EmptyQueueException(String msg) {
 		super(msg);

@@ -4,8 +4,8 @@ package Exceptions;
 public class EmptyTreeException extends Exception {
 
 	/**
-	 * Excepci�n que se lanza cuando el �rbol est� vac�o
-	 * @param msg mensaje que se mostrar�
+	 * Excepción que se lanza cuando el árbol está vacío
+	 * @param msg mensaje que se mostrará
 	 */
 	public EmptyTreeException(String msg) {
 		super(msg);

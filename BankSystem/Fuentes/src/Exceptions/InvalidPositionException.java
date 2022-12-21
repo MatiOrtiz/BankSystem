@@ -4,8 +4,8 @@ package Exceptions;
 public class InvalidPositionException extends Exception {
 	
 	/**
-	 * Excepci�n que se lanza cuando una posici�n es inv�lida
-	 * @param msg mensaje que se mostrar�
+	 * Excepción que se lanza cuando una posición es inválida
+	 * @param msg mensaje que se mostrará
 	 */
 	public InvalidPositionException(String msg) {
 		super(msg);

@@ -1,0 +1,14 @@
+package Exceptions;
+
+
+public class InvalidKeyException extends Exception {
+	
+	/**
+	 * Excepci�n que se lanza cuando la clave de la entrada es inv�lida
+	 * @param msg mensaje que se mostrar�
+	 */
+	public InvalidKeyException(String msg) {
+		super(msg);
+	}
+
+}

@@ -11,7 +11,7 @@ public interface PriorityQueue<K, V> {
 public int size();
 
 /**
- * Consulta si la cola est� vac�a.
+ * Consulta si la cola está vacía.
  * @return Verdadero si la cola está vacía, falso en caso contrario.
  */
 public boolean isEmpty();

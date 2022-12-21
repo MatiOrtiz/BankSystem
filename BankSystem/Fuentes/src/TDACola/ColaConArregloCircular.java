@@ -18,20 +18,37 @@ public class ColaConArregloCircular<E> implements Queue<E> {
 		r = 0;
 	}
 	
+	/**
+	 * Devuelve la cantidad de elementos en la cola.
+	 * @return Cantidad de elementos en la cola.
+	 */
 	public int size() {
 		return((q.length - f + r) % q.length) ;
 	}
 
+	/**
+	 * Consulta si la cola está vacía.
+	 * @return Verdadero si la cola está vacía, falso en caso contrario.
+	 */
 	public boolean isEmpty() {
 		return f == r;
 	}
 	
+	/**
+	 * Inspecciona el elemento que se encuentra en el frente de la cola.
+	 * @return Elemento que se encuentra en el frente de la cola.
+	 * @throws EmptyQueueException si la cola está vacía.
+	 */
 	public E front() throws EmptyQueueException {
 		if(isEmpty()) 
 			throw new EmptyQueueException("Error. Cola vacía.");
 		return q[f];
 	}
 
+	/**
+	 * Inserta un elemento en el fondo de la cola.
+	 * @param element Nuevo elemento a insertar.
+	 */
 	public void enqueue(E element) {
 		if(size() == q.length-1) {
 			E[] aux = copiar(f);
@@ -42,6 +59,7 @@ public class ColaConArregloCircular<E> implements Queue<E> {
 			q[r] = element;
 			r = (r + 1) % q.length;
 	}
+	
 	/**
 	 * Duplica el tamaño del arreglo de la cola circular, e inserta en el los elementos que contenía anteriormente.
 	 * @param start posición en el arreglo, a partir del cual se realizará la copia de los elementos.
@@ -58,7 +76,12 @@ public class ColaConArregloCircular<E> implements Queue<E> {
 		return aux;
 	} 
 
-	
+
+	/**
+	 * Remueve el elemento en el frente de la cola.
+	 * @return Elemento removido.
+	 * @throws EmptyQueueException si la cola está vacía.
+	 */
 	public E dequeue() throws EmptyQueueException {
 		if( isEmpty()) 
 			throw new EmptyQueueException("Cola vacía.");

@@ -1,0 +1,124 @@
+package Programa;
+import java.util.Calendar;
+
+/*
+ * Permite crear una nueva transacción con los datos de la persona, el monto, el día, mes y año, la hora 
+ * y si el tipo de transaccion es depósito o transferencia, para luego quedar registrada en la cuenta bancaria.
+ */
+public class Transaccion {
+	
+	//Tributes
+	protected Calendar calendario;
+	protected int anio, mes, dia; 
+	protected int hora, minutos, segundos, numDoc;
+	protected String nombre, apellido, tipoTransaccion;
+	protected float monto;
+	
+	//Constructor----------------------------------------------------------------------------------------------------------------------------------
+	
+	/*
+	 * Crea una instancia de clase Transaccion
+	 */
+	public Transaccion(String nombre, String apellido, int numDoc, String tipoTransaccion, float monto) {
+		this.nombre= nombre;
+		this.apellido= apellido;
+		this.numDoc= numDoc;
+		this.tipoTransaccion= tipoTransaccion;
+		this.monto= monto;
+		
+		calendario= Calendar.getInstance();
+		
+		hora= calendario.get(Calendar.HOUR_OF_DAY);
+		minutos= calendario.get(Calendar.MINUTE);
+		segundos= calendario.get(Calendar.SECOND);
+		dia= calendario.get(Calendar.DAY_OF_MONTH);
+		mes= calendario.get(Calendar.MONTH);
+		anio= calendario.get(Calendar.YEAR);
+	}
+	
+	//Methods----------------------------------------------------------------------------------------------------------------------------------
+	
+	/*
+	 * @return nombre
+	 */
+	public String getFirstName() {
+		return nombre;
+	}
+	
+	/*
+	 * @return apellido
+	 */
+	public String getLastName() {
+		return apellido;
+	}
+	
+	/*
+	 * @return numero de documento
+	 */
+	public int getDocNumber() {
+		return numDoc;
+	}
+	
+	/*
+	 * @return tipo de transaccion
+	 */
+	public String getPayType() {
+		return tipoTransaccion;
+	}
+	
+	/* 
+	 * @return año
+	 */
+	public int getYear() {
+		return anio;
+	}
+	
+	/*
+	 * @return mes
+	 */
+	public int getMonth() {
+		return mes+1;
+	}
+	
+	/*
+	 * @return dia
+	 */
+	public int getDay() {
+		return dia;
+	}
+	
+	/*
+	 * @return hora
+	 */
+	public int getHour() {
+		return hora;
+	}
+	
+	/*
+	 * @return minutos
+	 */
+	public int getMinutes() {
+		return minutos;
+	}
+	
+	/*
+	 * @return segundos
+	 */
+	public int getSeconds() {
+		return segundos;
+	}
+	
+	/*
+	 * @return monto
+	 */
+	public float getAmount() {
+		return monto;
+	}
+	
+	/*
+	 * @return una cadena String con todos los atributos
+	 */
+	public String toString() {
+		return "Nombre completo: "+nombre +", "+ apellido +" -- DNI: "+ numDoc +" -- Tipo: "+tipoTransaccion +" -- Monto: "+monto +" -- Fecha: "+ dia +"/"+ (mes+1) +"/"+ anio +" -- Hora: "+ hora +":"+ minutos;
+	}
+}

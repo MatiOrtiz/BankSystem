@@ -33,15 +33,28 @@ public class DiccionarioHashAbierto<K, V> implements Dictionary<K, V> {
 		return key.hashCode() % N;
 	}
 
-
+	/**
+	 * Consulta el número de entradas del diccionario.
+	 * @return Número de entradas del diccionario.
+	 */
 	public int size() {
 		return n;
 	}
 
+	/**
+	 * Consulta si el diccionario está vacío.
+	 * @return Verdadero si el diccionario está vacío, falso en caso contrario.
+	 */
 	public boolean isEmpty() {
 		return n == 0;
 	}
 
+	/**
+	 * Busca una entrada con clave igual a una clave dada y la devuelve, si no existe retorna nulo.
+	 * @param key Clave a buscar.
+	 * @return Entrada encontrada.
+	 * @throws InvalidKeyException si la clave pasada por parámetro es inválida.
+	 */
 	public Entry<K,V> find(K key) throws InvalidKeyException {
 		checkKey(key);
 		Entry<K, V> ret = null;
@@ -62,6 +75,12 @@ public class DiccionarioHashAbierto<K, V> implements Dictionary<K, V> {
 	}
 
 
+	/**
+	 * Retorna una colección iterable que contiene todas las entradas con clave igual a una clave dada.
+	 * @param key Clave de las entradas a buscar.
+	 * @return Colección iterable de las entradas encontradas.
+	 * @throws InvalidKeyException si la clave pasada por parámetro es inválida.
+	 */
 	public Iterable<Entry<K, V>> findAll(K key) throws InvalidKeyException {
 		checkKey(key);
 		PositionList<Entry<K, V>> lista = new ListaDoblementeEnlazada<Entry<K, V>>();
@@ -76,6 +95,12 @@ public class DiccionarioHashAbierto<K, V> implements Dictionary<K, V> {
 	}
 
 
+	/**
+	 * Inserta una entrada con una clave y un valor dado en el diccionario y retorna la entrada creada.
+	 * @param key Clave de la entrada a crear.
+	 * @return value Valor de la entrada a crear.
+	 * @throws InvalidKeyException si la clave pasada por parámetro es inválida.
+	 */
 	public Entry<K, V> insert(K key, V value) throws InvalidKeyException {
 		checkKey(key);
 
@@ -88,7 +113,12 @@ public class DiccionarioHashAbierto<K, V> implements Dictionary<K, V> {
 		return nueva;
 	}
 
-
+	/**
+	 * Remueve una entrada dada en el diccionario y devuelve la entrada removida.
+	 * @param e Entrada a remover.
+	 * @return Entrada removida.
+	 * @throws InvalidEntryException si la entrada no está en el diccionario o es inválida.
+	 */
 	public Entry<K, V> remove(Entry<K, V> e) throws InvalidEntryException {
 		if (e == null)
 			throw new InvalidEntryException("Entrada Invalida");
@@ -115,7 +145,10 @@ public class DiccionarioHashAbierto<K, V> implements Dictionary<K, V> {
 		return salida;
 	}
 
-
+	/**
+	 * Retorna una colección iterable con todas las entradas en el diccionario.
+	 * @return Colección iterable de todas las entradas.
+	 */
 	public Iterable<Entry<K, V>> entries() {
 		PositionList<Entry<K, V>> lista = new ListaDoblementeEnlazada<Entry<K, V>>();
 		for (int i = 0; i < N; i++) {
@@ -189,20 +222,6 @@ public class DiccionarioHashAbierto<K, V> implements Dictionary<K, V> {
 				divisor++;
 		}
 		return es;
-	}
-
-	public Iterable<V> eliminarTodos(K key) throws InvalidKeyException{
-		if(key == null)
-			throw new InvalidKeyException("Clave nula");
-		PositionList<V> lista = new ListaDoblementeEnlazada<V>();
-		try {
-		for(Entry<K, V> e : findAll(key)) {
-			lista.addLast(remove(e).getValue());
-		}
-		}catch(InvalidEntryException e) {
-			e.printStackTrace();
-		}
-		return lista;
 	}
 
 }

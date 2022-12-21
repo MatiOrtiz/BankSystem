@@ -4,8 +4,8 @@ public class BoundaryViolationException extends Exception {
 
 	
 	/**
-	 * Excepci�n que se lanza cuando un �ndice est� fuera de los l�mites
-	 * @param a mensaje que se mostrar�
+	 * Excepción que se lanza cuando un índice está fuera de los límites
+	 * @param a mensaje que se mostrará
 	 */
 	public BoundaryViolationException(String a) {
 		super(a);

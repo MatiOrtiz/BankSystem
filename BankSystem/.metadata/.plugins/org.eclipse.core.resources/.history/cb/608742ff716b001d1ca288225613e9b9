@@ -1,0 +1,10 @@
+package Programa;
+
+public class ComparadorTransac<E extends Transaccion> implements java.util.Comparator<E> {
+
+	public int compare(E i1, E i2) {
+		
+		return (int) (i1.getAmount() - i2.getAmount());
+	
+	}
+}

@@ -4,8 +4,8 @@ package Exceptions;
 public class InvalidEntryException extends Exception {
 	
 	/**
-	 * Excepci�n que se lanza cuando la entrada es inv�lida
-	 * @param a mensaje que se mostrar�
+	 * Excepción que se lanza cuando la entrada es inválida
+	 * @param a mensaje que se mostrará
 	 */
 	public InvalidEntryException (String a) {
 		super(a);

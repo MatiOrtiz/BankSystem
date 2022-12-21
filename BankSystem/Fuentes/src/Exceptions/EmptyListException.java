@@ -5,8 +5,8 @@ public class EmptyListException extends Exception {
 
 	
 	/**
-	 * Excepci�n que se lanza cuando la lista est� vacia
-	 * @param msg mensaje que se mostrar�
+	 * Excepción que se lanza cuando la lista está vacía
+	 * @param msg mensaje que se mostrará
 	 */
 	public EmptyListException(String msg) {
 		super(msg);
